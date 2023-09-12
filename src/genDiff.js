@@ -2,16 +2,16 @@ import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';
 
-const getWay = (filepath) => {
+function getWay(filepath) {
   if (filepath.startsWith('/')) {
     return path.resolve(filepath);
   } return `${process.cwd()}${filepath}`;
-};
+}
 
-const parseFile = (filepath) => {
-    const readFile = JSON.parse(fs.readFileSync(getWay(filepath), "utf8"));
-    return readFile;
-};
+function parseFile(filepath) {
+  const readFile = JSON.parse(fs.readFileSync(getWay(filepath), 'utf8'));
+  return readFile;
+}
 
 const genDiff = (filepath1, filepath2) => {
   const readFile1 = parseFile(filepath1);
@@ -23,14 +23,15 @@ const genDiff = (filepath1, filepath2) => {
   let resultStr = '';
   sortedKeys.map((key) => {
     if (readFile2.hasOwnProperty(key) && !readFile1.hasOwnProperty(key)) {
-      resultStr = `${resultStr}\n  +${key} = ${readFile2[key]}`;
+      resultStr = `${resultStr}\n  +${key}: ${readFile2[key]}`;
     } else if (readFile1.hasOwnProperty(key) && !readFile2.hasOwnProperty(key)) {
-        resultStr = `${resultStr}\n  -${key} = ${readFile1[key]}`;
+      resultStr = `${resultStr}\n  -${key}: ${readFile1[key]}`;
     } else if (readFile1.hasOwnProperty(key) && readFile2.hasOwnProperty(key) && readFile1[key] !== readFile2[key]) {
-        resultStr = `${resultStr}\n  -${key} = ${readFile1[key]}\n  +${key} = ${readFile2[key]}`; 
+      resultStr = `${resultStr}\n  -${key}: ${readFile1[key]}\n  +${key}: ${readFile2[key]}`;
     } else {
-        resultStr = `${resultStr}\n   ${key} = ${readFile1[key]}`;
+      resultStr = `${resultStr}\n   ${key}: ${readFile1[key]}`;
     }
+    return resultStr;
   });
   return `{${resultStr}\n}`;
 };
