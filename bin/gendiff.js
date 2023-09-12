@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import genDiff from '../src/genDiff.js';
 
 const program = new Command();
 
@@ -11,8 +12,8 @@ program.description('Compares two configuration files and shows a difference.');
 program.arguments('<filepath1> <filepath2>');
 
 program.action((filepath1, filepath2) => {
-  console.log('filepath1:', filepath1);
-  console.log('filepath2:', filepath2);
+  const result = genDiff(filepath1, filepath2);
+  console.log(result);
 });
 
 program.helpOption('-h, --help', 'output usage information');
