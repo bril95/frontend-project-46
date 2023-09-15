@@ -1,8 +1,8 @@
 name: Github Actions
-# on – определяет события, которые запускают воркфлоу
+
 on: push
 jobs:
-  build: # имя взято для примера
+  build: 
     runs-on: ubuntu-latest
 
     steps:
@@ -14,11 +14,22 @@ jobs:
           node-version: '18.x'
           cache: 'npm' # ускоряет повторные сборки
       # Ставим зависимости
-      - run: npm install
-      # Запускаем линтер
-      - run: npm run lint
-      # Запускаем тесты
-      # у шагов может быть имя, иногда это помогает отладке
-      # имя выводится на Github при просмотре сборки
+      - name: run install
+        run: make install
+
+      - name: run lint 
+        run: make lint
+
       - name: run tests
-        run: npm test # name и run относятся к одной задаче, поэтому дефис ставится только перед name
+        run: make test 
+
+        - name: Test & publish code coverage
+        # Publish code coverage on Code Climate
+        # https://github.com/paambaati/codeclimate-action
+        uses: paambaati/codeclimate-action@v2.7.4
+        # Add Code Climate secret key
+        env:
+          CC_TEST_REPORTER_ID: acc21f172d4df284fe99e3255ba3d8190722d2b3fe28d32e7ebf8e17a46d0ac3
+        with:
+          coverageCommand: make test-coverage
+          debug: true

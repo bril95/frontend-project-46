@@ -9,3 +9,9 @@ publish:
 
 lint:
 	npx eslint .
+
+test:
+	npx jest
+
+test-covarage:
+	nom test -- --coverage --coverageProvider=v8
