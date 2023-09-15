@@ -1,7 +1,18 @@
-// import generateDiff from '../src/index.js';
-// import expected from '../__fixtures__/expected.txt';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+import fs from 'fs';
+import generateDiff from '../src/index.js';
 
-// test('reverse', () => {
-//     expect(reverse('hello')).toEqual('olleh');
-//     expect(reverse('')).toEqual('');
-//   });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+
+const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
+const expected = readFile('expected.txt');
+
+test.each(['json', 'yml'])('%s test', (format) => {
+  const file1 = getFixturePath(`filepath1.${format}`);
+  const file2 = getFixturePath(`filepath2.${format}`);
+  expect(generateDiff(file1, file2)).toEqual(expected);
+});
