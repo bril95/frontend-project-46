@@ -14,4 +14,4 @@ test:
 	npx jest
 
 test-covarage:
-	nom test -- --coverage --coverageProvider=v8
+	npx jest --coverage
