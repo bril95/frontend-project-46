@@ -5,20 +5,27 @@ const genDiff = (filepath1, filepath2) => {
   const keysFile2 = Object.keys(filepath2);
   const allKeys = _.uniq([...keysFile1, ...keysFile2]);
   const sortedKeys = _.sortBy(allKeys);
-  let resultStr = '';
-  sortedKeys.map((key) => {
-    if (filepath2.hasOwnProperty(key) && !filepath1.hasOwnProperty(key)) {
-      resultStr = `${resultStr}\n  + ${key}: ${filepath2[key]}`;
-    } else if (filepath1.hasOwnProperty(key) && !filepath2.hasOwnProperty(key)) {
-      resultStr = `${resultStr}\n  - ${key}: ${filepath1[key]}`;
-    } else if (filepath1.hasOwnProperty(key) && filepath2.hasOwnProperty(key) && filepath1[key] !== filepath2[key]) {
-      resultStr = `${resultStr}\n  - ${key}: ${filepath1[key]}\n  + ${key}: ${filepath2[key]}`;
-    } else {
-      resultStr = `${resultStr}\n    ${key}: ${filepath1[key]}`;
+  const result = sortedKeys.map((key) => {
+    if (_.isPlainObject(filepath1[key]) && _.isPlainObject(filepath2[key])) {
+      const children = genDiff(filepath1[key], filepath2[key]);
+      return {
+        status: 'children', key, value: filepath1[key], children,
+      };
     }
-    return resultStr;
+    if (!_.has(filepath1, key) && _.has(filepath2, key)) {
+      return { status: 'added', key, value: filepath2[key] };
+    }
+    if (_.has(filepath1, key) && !_.has(filepath2, key)) {
+      return { status: 'deleted', key, value: filepath1[key] };
+    }
+    if (filepath1[key] !== filepath2[key]) {
+      return {
+        status: 'updated', key, value: filepath2[key], oldValue: filepath1[key],
+      };
+    }
+    return { status: 'unchanged', key, value: filepath1[key] };
   });
-  return `{${resultStr}\n}`;
+  return result;
 };
 
 export default genDiff;
