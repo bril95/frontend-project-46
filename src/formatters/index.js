@@ -7,9 +7,8 @@ const formatName = (tree, format) => {
       return stylish(tree);
     case 'plain':
       return plain(tree);
-    default:
-      throw new Error(`Unknown sign: '${format}'!`);
   }
+  return '';
 };
 
 export default formatName;
