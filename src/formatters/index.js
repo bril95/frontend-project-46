@@ -10,8 +10,9 @@ const formatName = (tree, format) => {
       return plain(tree);
     case 'json':
       return json(tree);
+    default:
+      return '';
   }
-  return '';
 };
 
 export default formatName;
