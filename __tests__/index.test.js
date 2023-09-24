@@ -9,10 +9,12 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
-const expected = readFile('expected.txt');
+const expectedStylish = readFile('expectedStylish.txt');
+const expectedPlain = readFile('expectedPlain.txt');
 
 test.each(['json', 'yml'])('%s test', (format) => {
   const file1 = getFixturePath(`filepath1.${format}`);
   const file2 = getFixturePath(`filepath2.${format}`);
-  expect(generateDiff(file1, file2)).toEqual(expected);
+  expect(generateDiff(file1, file2, 'stylish')).toEqual(expectedStylish);
+  expect(generateDiff(file1, file2, 'plain')).toEqual(expectedPlain);
 });
