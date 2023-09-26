@@ -17,12 +17,12 @@ const getInfo = {
   deleted: (element, iter, path) => `Property '${getPath(path, element.key)}' was removed`,
   updated: (element, iter, path) => `Property '${getPath(path, element.key)}' was updated. From ${getValue(element.oldValue)} to ${getValue(element.value)}`,
   unchanged: () => [],
-  children: (element, iter, path) => iter(element.children, [...path, element.key]),
+  nested: (element, iter, path) => iter(element.children, [...path, element.key]),
 };
 
 const plain = (tree) => {
   const iter = (node, path) => {
-    const dataToString = node.flatMap((elem) => getInfo[elem.status](elem, iter, path));
+    const dataToString = node.flatMap((elem) => getInfo[elem.type](elem, iter, path));
     return dataToString.join('\n');
   };
   return iter(tree, []);

@@ -9,21 +9,21 @@ const genDiff = (filepath1, filepath2) => {
     if (_.isPlainObject(filepath1[key]) && _.isPlainObject(filepath2[key])) {
       const children = genDiff(filepath1[key], filepath2[key]);
       return {
-        status: 'children', key, value: filepath1[key], children,
+        type: 'nested', key, value: filepath1[key], children,
       };
     }
     if (!_.has(filepath1, key) && _.has(filepath2, key)) {
-      return { status: 'added', key, value: filepath2[key] };
+      return { type: 'added', key, value: filepath2[key] };
     }
     if (_.has(filepath1, key) && !_.has(filepath2, key)) {
-      return { status: 'deleted', key, value: filepath1[key] };
+      return { type: 'deleted', key, value: filepath1[key] };
     }
     if (filepath1[key] !== filepath2[key]) {
       return {
-        status: 'updated', key, value: filepath2[key], oldValue: filepath1[key],
+        type: 'updated', key, value: filepath2[key], oldValue: filepath1[key],
       };
     }
-    return { status: 'unchanged', key, value: filepath1[key] };
+    return { type: 'unchanged', key, value: filepath1[key] };
   });
   return result;
 };

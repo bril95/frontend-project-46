@@ -16,8 +16,6 @@ program.action((filepath1, filepath2) => {
   console.log(result);
 });
 
-program.helpOption('-h, --help', 'output usage information');
-
 program.option('-f, --format <type>', 'output format', 'stylish');
 
 program.parse();
