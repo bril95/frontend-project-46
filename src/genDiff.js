@@ -1,29 +1,29 @@
 import _ from 'lodash';
 
-const genDiff = (filepath1, filepath2) => {
-  const keysFile1 = Object.keys(filepath1);
-  const keysFile2 = Object.keys(filepath2);
+const genDiff = (obj1, obj2) => {
+  const keysFile1 = Object.keys(obj1);
+  const keysFile2 = Object.keys(obj2);
   const allKeys = _.uniq([...keysFile1, ...keysFile2]);
   const sortedKeys = _.sortBy(allKeys);
   const result = sortedKeys.map((key) => {
-    if (_.isPlainObject(filepath1[key]) && _.isPlainObject(filepath2[key])) {
-      const children = genDiff(filepath1[key], filepath2[key]);
+    if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
+      const children = genDiff(obj1[key], obj2[key]);
       return {
-        type: 'nested', key, value: filepath1[key], children,
+        type: 'nested', key, value: obj1[key], children,
       };
     }
-    if (!_.has(filepath1, key) && _.has(filepath2, key)) {
-      return { type: 'added', key, value: filepath2[key] };
+    if (!_.has(obj1, key) && _.has(obj2, key)) {
+      return { type: 'added', key, value: obj2[key] };
     }
-    if (_.has(filepath1, key) && !_.has(filepath2, key)) {
-      return { type: 'deleted', key, value: filepath1[key] };
+    if (_.has(obj1, key) && !_.has(obj2, key)) {
+      return { type: 'deleted', key, value: obj1[key] };
     }
-    if (filepath1[key] !== filepath2[key]) {
+    if (!_.isEqual(obj1[key], obj2[key])) {
       return {
-        type: 'updated', key, value: filepath2[key], oldValue: filepath1[key],
+        type: 'updated', key, value: obj2[key], oldValue: obj1[key],
       };
     }
-    return { type: 'unchanged', key, value: filepath1[key] };
+    return { type: 'unchanged', key, value: obj1[key] };
   });
   return result;
 };
