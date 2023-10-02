@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getIndent = (depth, defaultSpace = 2) => ' '.repeat(defaultSpace).repeat((depth * 2) - 2);
+const getIndent = (depth, defaultSpace = 2) => ' '.repeat(2 * depth * defaultSpace - 4);
 
 const stringify = (obj, depth) => {
   if (!_.isObject(obj)) {
