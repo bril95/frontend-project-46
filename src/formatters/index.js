@@ -1,8 +1,8 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
 
-const formatName = (tree, format) => {
-  switch (format) {
+const format = (tree, formatFile) => {
+  switch (formatFile) {
     case 'stylish':
       return stylish(tree);
     case 'plain':
@@ -10,8 +10,8 @@ const formatName = (tree, format) => {
     case 'json':
       return JSON.stringify(tree);
     default:
-      throw new Error(`Unknown format: '${format}'!`);
+      throw new Error(`Unknown format: '${formatFile}'!`);
   }
 };
 
-export default formatName;
+export default format;

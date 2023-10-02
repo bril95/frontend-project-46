@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
-const genDiff = (obj1, obj2) => {
+const generateTree = (obj1, obj2) => {
   const keysFile1 = Object.keys(obj1);
   const keysFile2 = Object.keys(obj2);
   const allKeys = _.uniq([...keysFile1, ...keysFile2]);
   const sortedKeys = _.sortBy(allKeys);
   const result = sortedKeys.map((key) => {
     if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
-      const children = genDiff(obj1[key], obj2[key]);
+      const children = generateTree(obj1[key], obj2[key]);
       return {
         type: 'nested', key, value: obj1[key], children,
       };
@@ -28,4 +28,4 @@ const genDiff = (obj1, obj2) => {
   return result;
 };
 
-export default genDiff;
+export default generateTree;
