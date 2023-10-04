@@ -6,7 +6,7 @@ import format from './formatters/index.js';
 
 const getPath = (filepath) => path.resolve(process.cwd(), filepath);
 
-const readFile = (filepath) => fs.readFileSync(getPath(`__fixtures__/${filepath}`), 'utf8');
+const readFile = (filepath) => fs.readFileSync(getPath(filepath), 'utf8');
 
 const getFormat = (filepath) => path.extname(filepath);
 
