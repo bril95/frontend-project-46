@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import _ from 'lodash';
 
-const parseFile = ([data, typeFile]) => {
+const parseFile = (data, typeFile) => {
   if (_.isEqual(typeFile, '.yml')) {
     return yaml.load(data);
   }
