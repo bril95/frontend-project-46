@@ -6,7 +6,7 @@ const parseFile = (data, typeFile) => {
     yml: yaml.load(data),
     yaml: yaml.load(data),
   };
-  return objWithTypeFile[typeFile.slice(1)];
+  return objWithTypeFile[typeFile];
 };
 
 export default parseFile;
