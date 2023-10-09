@@ -8,11 +8,14 @@ const stringify = (obj, depth) => {
   }
   const objectToString = Object.entries(obj, depth)
     .map(([key, value]) => `${getIndent(depth + 1)}  ${key}: ${stringify(value, depth + 1)}`);
-  return `{\n${objectToString.join('\n')}\n${getIndent(depth + 1)}}`;
+  return `{\n${objectToString.join('\n')}\n${getIndent(depth)}  }`;
 };
 
 const makeInfo = {
-  nested: (element, depth, iter) => `${getIndent(depth)}  ${element.key}: ${iter(element.children, depth + 1)}`,
+  nested: (element, depth, iter) => {
+    const value = iter(element.children, depth + 1);
+    return `${getIndent(depth)}  ${element.key}: ${value}\n${getIndent(depth)}  }`;
+  },
   unchanged: (element, depth) => `${getIndent(depth)}  ${element.key}: ${stringify(element.value, depth)}`,
   deleted: (element, depth) => `${getIndent(depth)}- ${element.key}: ${stringify(element.value, depth)}`,
   added: (element, depth) => `${getIndent(depth)}+ ${element.key}: ${stringify(element.value, depth)}`,
@@ -25,9 +28,9 @@ const makeInfo = {
 const stylish = (tree) => {
   const iter = (node, depth) => {
     const dataToString = node.flatMap((elem) => makeInfo[elem.type](elem, depth, iter));
-    return `{\n${dataToString.join('\n')}\n${getIndent(depth, 2)}}`;
+    return `{\n${dataToString.join('\n')}`;
   };
-  return iter(tree, 1);
+  return `${iter(tree, 1)}\n}`;
 };
 
 export default stylish;
