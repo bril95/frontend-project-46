@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getIndent = (depth, defaultSpace = 2) => ' '.repeat(depth * defaultSpace - 2);
+const getIndent = (depth, defaultSpace = 4) => ' '.repeat(depth * defaultSpace - 4);
 
 const stringify = (obj, depth) => {
   if (!_.isObject(obj)) {
@@ -12,8 +12,8 @@ const stringify = (obj, depth) => {
 };
 
 const makeInfo = {
-  nested: (element, depth, iter) => `${getIndent(depth)}  ${element.key}: ${iter(element.children, depth + 1)}`,
-  unchanged: (element, depth) => `${getIndent(depth)}  ${element.key}: ${stringify(element.value, depth)}`,
+  nested: (element, depth, iter) => `${getIndent(depth)}    ${element.key}: ${iter(element.children, depth + 1)}`,
+  unchanged: (element, depth) => `${getIndent(depth)}    ${element.key}: ${stringify(element.value, depth)}`,
   deleted: (element, depth) => `${getIndent(depth)}  - ${element.key}: ${stringify(element.value, depth)}`,
   added: (element, depth) => `${getIndent(depth)}  + ${element.key}: ${stringify(element.value, depth)}`,
   updated: (element, depth) => [
